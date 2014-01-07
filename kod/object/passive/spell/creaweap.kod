@@ -62,11 +62,12 @@ messages:
 	
    SomethingSaidDuringTrance(who=$,string=$)
    {
-	  local i, iSpellPower, iCount, iForm, oWeapon, oItemAtt;
-	  iCount = 0;
-	  iForm = -1;
+	  local i, iSpellPower, iCount,isWeaponCreateable, oWeapon, oItemAtt,iSpellPercent;
+	  iCount = 0;	  
+	  isWeaponCreateable = false;
 	  
 	  iSpellPower = Send(self,@GetSpellPower,#who=who);
+	  iSpellPercent = Send(who,@GetSpellAbility,#spell_num=SID_CREATE_WEAPON);
 	  for i in Send(SYS,@GetItemTemplates)
 		{
 			if(StringEqual(string,Send(i,@GetName)))
@@ -75,18 +76,17 @@ messages:
 				{
 					return;
 				}
-				if(NOT Send(self,@CanCreateWeapon,#sWeapon=Send(i,@GetName),#iSpellPower=iSpellPower))
+				if(NOT Send(self,@CanCreateWeapon,#sWeapon=Send(i,@GetName),#iSpellPower=iSpellPower,#iSpellPercent=iSpellPercent))
 				{
 					return;
 				}
 				oWeapon = i;
-				iForm = iCount;
+				isWeaponCreateable = true;				
 				break;
-			}
-			iCount = iCount + 1;
+			}			
 		}
 		
-		if(iForm <> -1)
+		if(isWeaponCreateable = true)
 		{
 			 Send(who,@BreakTrance,#event=EVENT_STEER);  
 			 % Weapon has half its hits, + iSpellPower% of the other half.
@@ -102,45 +102,41 @@ messages:
 		  {
 			  Send(oWeapon,@Delete);
 			  Send(who, @MsgSendUser, #message_rsc=createweapon_inv_full_rsc,#parm1=send(oWeapon,@GetCapIndef),#parm2=send(oWeapon,@GetName));
-		  }
-		  
+		  }		  
 		  oItemAtt = send(SYS,@FindItemAttByNum,#Num=IA_MADE);
-
 		  send(oItemAtt,@AddtoItem,#oitem=oWeapon,#timer_duration=send(self,@getduration,#iSpellpower=iSpellpower));
 			 
 		}
 		return;
    }
-   CanCreateWeapon(sWeapon=$,iSpellPower=$)
-   {
-		debug("Your Can Create Weapon Name is ",sWeapon);
-		debug("Your Can CreateWeapon Spell Power is", iSpellPower);
+   CanCreateWeapon(sWeapon=$,iSpellPower=$,iSpellPercent=$)
+   {		
 	  
-	  if(StringEqual("Mace",sWeapon) AND iSpellPower > 0)
+	  if(StringEqual("Mace",sWeapon) AND iSpellPercent > 0)
 	  {
 		return true;
 	  }
-	  if(StringEqual("Short Sword",sWeapon) AND iSpellPower >= 30)
+	  if(StringEqual("Short Sword",sWeapon) AND iSpellPercent >= 30)
 	  {
 		return true;
 	  }
-	  if(StringEqual("Hammer",sWeapon) AND iSpellPower >= 45)
+	  if(StringEqual("Hammer",sWeapon) AND iSpellPercent >= 45)
 	  {
 		return true;
 	  }
-	  if(StringEqual("Long Sword",sWeapon) AND iSpellPower >= 75)
+	  if(StringEqual("Long Sword",sWeapon) AND iSpellPercent >=50)
 	  {
 		return true;
 	  }
-	  if(StringEqual("Scimitar",sWeapon) AND iSpellPower >= 95)
+	  if(StringEqual("Scimitar",sWeapon) AND iSpellPercent >= 55)
 	  {
 		return true;
 	  }
-	  if(StringEqual("Mystic Sword",sWeapon) AND iSpellPower >= 95)
+	  if(StringEqual("Mystic Sword",sWeapon) AND iSpellPercent >= 95)
 	  {
 		return true;
 	  }
-	  if(StringEqual("Battle Bow",sWeapon) AND iSpellPower >= 99)
+	  if(StringEqual("Battle Bow",sWeapon) AND iSpellPercent >= 99)
 	  {
 		return true;
 	  }
@@ -149,8 +145,7 @@ messages:
    
    CastSpell(who = $,lTargets = $,iSpellPower=$)
    {
-      local oWeapon,iNum, oItemAtt;
-	  debug("Your spell power is",iSpellPower);
+      local oWeapon,iNum, oItemAtt;	  
 	 
       % Keep the bottom end a bit low because the player might want a lower weapon.
       iNum = Random(iSpellPower/3,iSpellPower);
@@ -197,8 +192,7 @@ messages:
                }
             }
          }
-      }
-	  debug("oWeapon in the normal cast", oWeapon);
+      }	  
 
       % Weapon has half its hits, + iSpellPower% of the other half.
       Send(oWeapon,@SetHits,#number=(Send(oWeapon,@GetHits)*(iSpellPower+100))/200);
@@ -216,9 +210,7 @@ messages:
       }
       
       oItemAtt = send(SYS,@FindItemAttByNum,#Num=IA_MADE);
-
       send(oItemAtt,@AddtoItem,#oitem=oWeapon,#timer_duration=send(self,@getduration,#iSpellpower=iSpellpower));
-
       propagate;
    }
 
