@@ -192,7 +192,8 @@ resources:
    autolooted_some = "You loot some of the items from your fallen kill."
    autolooted_none = "You find nothing easily lootable on your slain enemy."
    
-   magicitem_drop = "You sense something good has dropped on the ground."
+   magicitem_drop = "You sense something odd about %s %s among your fallen enemy's belongings."
+   magicitem_sound = portal.wav
 
 classvars:
 
@@ -5011,7 +5012,9 @@ messages:
 		{			
 			if(Send(self,@IsMagicWeaponDrop,#oWeapon=oTreasure))
 			{
-				Send(who,@MsgSendUser,#message_rsc=magicitem_drop);
+				
+				Send(who,@MsgSendUser,#message_rsc=magicitem_drop,#parm1=Send(oTreasure,@GetInDef),#parm2=Send(oTreasure,@GetName));
+				Send(who,@SomethingWaveRoom,#what=self,#wave_rsc=magicitem_sound);
 			}
 		}
 		 
@@ -5066,7 +5069,7 @@ messages:
    }
    IsMagicWeaponDrop(oWeapon=$)
    {
-		% Types of  Weapon Attributes to Notify user of
+		% Types of  Weapons to notify on
 		if(send(oWeapon,@HasAttribute,#ItemAtt=WA_CURSED))
 		{		
 			return true;
