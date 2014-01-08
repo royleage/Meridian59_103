@@ -191,6 +191,8 @@ resources:
    autolooted_all = "You loot the corpse clean."
    autolooted_some = "You loot some of the items from your fallen kill."
    autolooted_none = "You find nothing easily lootable on your slain enemy."
+   
+   magicitem_drop = "You sense something good has dropped on the ground."
 
 classvars:
 
@@ -5004,7 +5006,15 @@ messages:
       
       % Now drop all the treasure.
       for oTreasure in lTreasureItems
-      {
+      {		
+		if(isClass(oTreasure,&weapon))
+		{			
+			if(Send(self,@IsMagicWeaponDrop,#oWeapon=oTreasure))
+			{
+				Send(who,@MsgSendUser,#message_rsc=magicitem_drop);
+			}
+		}
+		 
          if Send(poOwner,@ReqNewHold,#what=oTreasure,#new_row=piRow,
                  #new_col=piCol)
             AND Send(poOwner,@ReqSomethingMoved,#what=oTreasure,#new_row=piRow,
@@ -5054,7 +5064,43 @@ messages:
 
       return;
    }
-
+   IsMagicWeaponDrop(oWeapon=$)
+   {
+		% Types of  Weapon Attributes to Notify user of
+		if(send(oWeapon,@HasAttribute,#ItemAtt=WA_CURSED))
+		{		
+			return true;
+		}
+		if(send(oWeapon,@HasAttribute,#ItemAtt=WA_SPELLCASTER))
+		{		
+			return true;
+		}
+		if(send(oWeapon,@HasAttribute,#ItemAtt=WA_EXPERT))
+		{		
+			return true;
+		}
+		if(send(oWeapon,@HasAttribute,#ItemAtt=WA_BLINDER))
+		{		
+			return true;
+		}
+		if(send(oWeapon,@HasAttribute,#ItemAtt=WA_BONKER))
+		{		
+			return true;
+		}
+		if(send(oWeapon,@HasAttribute,#ItemAtt=WA_PARALYZER))
+		{		
+			return true;
+		}
+		if(send(oWeapon,@HasAttribute,#ItemAtt=WA_VAMPER))
+		{		
+			return true;
+		}
+		if(send(oWeapon,@HasAttribute,#ItemAtt=IA_DURABLE))
+		{		
+			return true;
+		}
+		return false;
+   }
    CanMonsterFight(who=$)
    {
       if (piBehavior & AI_NPC)
