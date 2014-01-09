@@ -5014,7 +5014,7 @@ messages:
 			{
 				
 				Send(who,@MsgSendUser,#message_rsc=magicitem_drop,#parm1=Send(oTreasure,@GetInDef),#parm2=Send(oTreasure,@GetName));
-				Send(who,@SomethingWaveRoom,#what=self,#wave_rsc=magicitem_sound);
+				Send(Send(self,@GetOwner),@SomethingWaveRoom,#what=self,#wave_rsc=magicitem_sound);
 			}
 		}
 		 
