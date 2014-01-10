@@ -202,6 +202,7 @@ classvars:
    vrEnchantment_type = spell_Enchantment_type_default_rsc
 
    vrToo_few_hp = spell_too_few_hp_rsc
+   
 
 properties:
 
@@ -1165,11 +1166,24 @@ messages:
    "This is always TRUE for touch attack spells, because touch attacks"
    "figure their success in player.kod."
    {
-      local num, iRequisiteStat, iability, lJalaInfo, oJalaSpell, lJalaState,
-      iDistance, oTarget, oRing;
+	 
+      local num, iRequisiteStat, iability, lJalaInfo, oJalaSpell, lJalaState,lSafeZones,
+      iDistance, oTarget, oRing, iSafeZone;
+	  % No Fizzle Zones
+      lSafeZones = [RID_TOS_INN,RID_TOS_HALL,RID_MAR_INN,RID_COR_INN,RID_JAS_INN,RID_BAR_INN,RID_BAR_HALL,
+	  RID_JAS_HALL,RID_KOC_INN,RID_KOC_HALL_OF_HEROES,RID_GUILDH1,RID_GUILDH2,RID_GUILDH3,RID_GUILDH4,RID_GUILDH5,
+	  RID_GUILDH6,RID_GUILDH7,RID_GUILDH8,RID_GUILDH9,RID_GUILDH10,RID_GUILDH11,RID_GUILDH12,RID_GUILDH13,RID_GUILDH14,
+	  RID_GUILDH15];	  
+	  for iSafeZone in lSafeZones
+	  {
+		if Send(Send(who,@GetOwner),@GetRoomNum) = iSafeZone
+		{
+			return TRUE;
+		}
+	  }
 
       oRing = Send(who,@FindHolding,#class=&ReagentRing);
-
+	  
       if iSpellpower = 0
       {
          Debug("Bad iSpellpower passed to SuccessChance");
