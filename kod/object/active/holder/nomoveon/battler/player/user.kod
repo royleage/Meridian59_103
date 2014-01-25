@@ -4571,8 +4571,7 @@ messages:
          Send(self,@MsgSendUser,#message_rsc=user_no_fight);
          
          return FALSE;  
-      }
-	  % Command minions to aid in combat
+		% Command minions to aid in combat
 		if Send(self,@CanUserHaveMinions,#who=self)
 		{
 			Send(self,@CommandMinionAttack,#oMaster=self,#oTarget=what);	
