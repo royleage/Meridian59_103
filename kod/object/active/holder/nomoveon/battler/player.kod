@@ -4732,12 +4732,20 @@ messages:
               report = True, report_resistance = TRUE, absolute = FALSE)
    {
       local i, iResistance, oSoldierShield, gainchance, color_rsc, iDuration, oSpell, oGort,
-            iLimit, origdamage, oWeapon;
+            iLimit, origdamage, oWeapon, oMinion;
 			
 	  origdamage = damage;
 	  
       color_rsc = player_hit_color_none;
-      
+	  
+	  % Attacks against a minion master will cause minions to defend the master
+      if length(plControlledMinions) > 0
+	  {	    
+	     for oMinion in plControlledMinions
+		 {
+		    Send(self,@CommandMinionAttack,#oMaster=self,#oTarget=what);
+		 }
+	  }
       if what <> $ AND IsClass(what,&monster)
       {
          color_rsc = player_hit_color_blue;

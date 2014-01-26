@@ -4551,7 +4551,7 @@ messages:
    {
       local i, use_weapon, stroke_id, stroke_obj, is_spell;
 	  % Command minions to aid in combat
-	  if Send(self,@CanUserHaveMinions,#who=self)
+	  if length(Send(self,@GetControlledMinions)) > 0
       {
          Send(self,@CommandMinionAttack,#oMaster=self,#oTarget=what);                        
       }      
@@ -4653,7 +4653,7 @@ messages:
 	  % Command minions to aid in combat
 	  if NOT isClass(oSpell,&PersonalEnchantment) 
 	  {
-	     if Send(self,@CanUserHaveMinions,#who=self)
+	     if length(Send(self,@GetControlledMinions)) > 0
          {
             Send(self,@CommandMinionAttack,#oMaster=self,#oTarget=first(lTargets));                        
          }
