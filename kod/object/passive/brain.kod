@@ -433,8 +433,11 @@ messages:
         }
       }
       if (behavior & AI_MOVE_FOLLOW_MASTER) 
-      {
+      {		
         oMaster = send(mob,@GetMaster);
+		% Why am I not following my master??
+		%
+		%
         if oMaster <> $ 
         {
            oOwner = send(mob,@getOwner);
