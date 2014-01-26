@@ -4517,7 +4517,7 @@ messages:
  % Can the user have controllable units
    CanUserHaveMinions(who = $)
 	{        
-	   if isClass(who,&user) or isClass(who,&admin)
+	   if isClass(who,&user)
 	   {                        
 	      if Send(who,@GetSpellAbility,#spell_num=SID_ANIMATE) > 0
 	      {                                
@@ -4651,10 +4651,13 @@ messages:
    {
       local i, bFound, iSpell, iSpellNum, iSpellPower, lFinalTargets;
 	  % Command minions to aid in combat
-	  if Send(self,@CanUserHaveMinions,#who=self)
-      {
-         Send(self,@CommandMinionAttack,#oMaster=self,#oTarget=first(lTargets));                        
-      }      
+	  if NOT isClass(oSpell,&PersonalEnchantment) 
+	  {
+	     if Send(self,@CanUserHaveMinions,#who=self)
+         {
+            Send(self,@CommandMinionAttack,#oMaster=self,#oTarget=first(lTargets));                        
+         }
+	  }
       
       % User took an action!  Wake any AIs in the room to the user's presence!
       % bitflag check instead of function for speed.
