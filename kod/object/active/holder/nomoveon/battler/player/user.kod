@@ -4603,7 +4603,7 @@ messages:
                                 if Send(oActive,@GetMaster) = self
                                 {   
                                         if Send(oActive,@GetTarget) <> oTarget
-                                        {
+                                        {										
                                                 Send(oActive, @TargetSwitch, #what=oTarget, #iHatred=100);
                                                 Send(oActive, @EnterStateChase, #target=oTarget, #actnow=True);
                                         }
