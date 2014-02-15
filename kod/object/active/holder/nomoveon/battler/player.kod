@@ -3733,7 +3733,7 @@ messages:
       return TRUE;
    }
 
-   AllowPlayerAttack(victim=$, stroke_obj=$, use_weapon=$, report=TRUE, actual=TRUE)
+   AllowPlayerAttack(victim=$, stroke_obj=$, use_weapon=$, report=TRUE, actual=TRUE, spell_obj=$)
    "Will not let a person attack someone who isnt pkill_enabled."
    "Wll not let a person who isnt pkill_enabled attack another person."
    {
@@ -4800,7 +4800,7 @@ messages:
               report = True, report_resistance = TRUE, absolute = FALSE)
    {
       local i, iResistance, oSoldierShield, gainchance, color_rsc, iDuration, oSpell, oGort,
-            iLimit, origdamage, oWeapon;
+            iLimit, origdamage, oWeapon, shrunken;
                         
          origdamage = damage;
         
@@ -4979,7 +4979,7 @@ messages:
    % This function handles when is damage done to opponent.
    DidDamage(what = $, amount = 0)
    {
-      local oWeapon, i;
+      local oWeapon, i, shrunken;
 
       oWeapon = Send(self,@GetWeapon);
       
@@ -5111,7 +5111,7 @@ messages:
    KilledSomething(what = $,use_weapon = $,stroke_obj = $)
    "Called when the player killed something."
    {
-      local i, oSoldierShield, monstkarma, iChance, oEnemyGuild;
+      local i, oSoldierShield, monstkarma, iChance, oEnemyGuild, shrunken;
 
       % If we killed someone or something, we did damage.
       Send(self,@SetPlayerFlag,#flag=PFLAG_DID_DAMAGE,#value=TRUE);
@@ -6987,7 +6987,7 @@ messages:
                       refigureschools = TRUE)
    {
       local i, bFound, elemnum, iability, bUsed, spellname, iChange,
-            newability, oSpell, oRoom;
+            newability, oSpell, oRoom, shrunken;
 
       oSpell = Send(sys,@FindSpellByNum,#num=spell_num);
       if oSpell = $
@@ -7940,12 +7940,12 @@ messages:
    }
 
 
-   AdvancementCheck(what=$,killing_blow=TRUE,group_member_kill=FALSE)
+   AdvancementCheck(what=$,killing_blow=TRUE,group_member_kill=FALSE,group_member=$)
    "A player will need, on average, to kill a number of monsters equal to"
    "their maxhealth to gain a HP. This number is reduced by the player's"
    "stamina, all the way down to half for those with high staminas."
    {
-      local highmark, rand, dodgeskill, oSkill, monster_level, gain, gainmult, roll, iNumber, oWeapon;
+      local highmark, rand, dodgeskill, oSkill, monster_level, gain, gainmult, roll, iNumber, oWeapon, shrunken, lBuilderGroup;
             
       gain = 0;
       roll = FALSE;
@@ -8071,10 +8071,6 @@ messages:
          gainmult = bound(Send(Send(SYS, @GetSettings), @GetHPGainMultiplier),1,500);
          gain = gain * gainmult;
          
-         If IsClass(Send(self,@GetOwner),&InstanceRoom)
-         {
-            gain = gain * Send(Send(self,@GetOwner),@GetExperienceMod);
-         }
 
          piGain_chance = piGain_chance + gain;
 
