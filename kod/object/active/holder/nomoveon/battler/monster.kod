@@ -4157,7 +4157,7 @@ messages:
    {
       if IsClass(what,&Chalice)
          OR IsClass(what,&Scepter)
-         OR IsClass(what,&SpecialWand)
+         OR IsClass(what,&Rod)
          OR IsClass(what,&SpellItem)
          OR IsClass(what,&Book)
          OR IsClass(what,&Arsenic)

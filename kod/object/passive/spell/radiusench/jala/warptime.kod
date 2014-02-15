@@ -69,6 +69,16 @@ properties:
    prMusic= warptime_song
 
 messages:
+ 
+    GetStretchedTime(oldtime=0, iSpellPower=0, oRoom=$)
+    {
+       if oRoom <> $
+       {
+          iSpellPower = nth(send(oRoom,@GetEnchantmentState,#what=self),3);
+       }
+       
+       return oldtime*(100+iSpellPower)/100;
+    }
 
    ResetReagents()
    {

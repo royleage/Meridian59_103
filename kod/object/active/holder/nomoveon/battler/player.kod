@@ -1938,12 +1938,6 @@ messages:
          Send(self,@MsgSendUser,#message_rsc=player_assgame_soon);
       }
 
-      oCaramo = Send(SYS,@GetCaramo);
-      if oCaramo <> $
-      {
-         Send(oCaramo,@UserLogon,#who=self);
-      }
-
       if piPoisonStrength > 0
       {
          ptPoison = CreateTimer(self,@PoisonTimer,10000);

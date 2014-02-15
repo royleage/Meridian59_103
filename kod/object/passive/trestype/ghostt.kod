@@ -42,7 +42,6 @@ messages:
                      [ &FineLute, 5],
 					 [ &SanctuaryKey, 8],
                      [ &Key, 9 ],
-                     [ &FireWand, 14],
                      [ &HoldWand, 2],
                      [ &TruceScroll, 1]
                    ];
