@@ -13221,7 +13221,7 @@ messages:
          Send(self,@MsgSendUser,#message_rsc=rods_fully_recharged_by_safe_place_msg);
       }
 
-      
+      return;
    }
 
    RemoveControlledMinion(minion = $)
