@@ -27,6 +27,8 @@ resources:
    Conveyance_not_holding = "You cannot cast conveyance on an item you are not holding!"
 
    Conveyance_cast = "A small portal whips into existence, pulling %s%s to your vault."
+   
+   Conveyance_newb = "You seem unable to use this power from this location."
      
 classvars:
 
@@ -62,6 +64,12 @@ messages:
    CastSpell(who = $, lTargets = $)
    {
       local oTarget, oRoom, oVault, iFee, oMoney, iCash;
+	  
+	  if (Send(Send(who,@GetOwner),@GetRegion) = RID_NEWB_BASE)
+	  {
+	     Send(who,@MsgSendUser,#message_rsc=conveyance_newb);
+		 return;
+	  }
       
       oTarget = First(lTargets);
    
