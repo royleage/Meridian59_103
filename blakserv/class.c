@@ -225,7 +225,7 @@ void SetClassesSuperPtr(void)
 		}
 
 		if (length > 1)
-			eprintf("Fatal: Class hash bin %3i has length %i; Increase SizeClassHash in [Memory] in blakserv.cfg\n",i,length);
+			eprintf("Fatal: Class hash bin %3i (%s) has length %i; Increase SizeClassHash in [Memory] in blakserv.cfg\n",i,classes[i]->fname,length);
 
 	}
 }
