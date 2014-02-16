@@ -13195,6 +13195,7 @@ messages:
       local i, bResult, bGainedCharges;
 
       bGainedCharges = FALSE;
+      bResult = FALSE;
       for i in Send(self,@GetHolderPassive)
       {
          if IsClass(i,&Rod)
